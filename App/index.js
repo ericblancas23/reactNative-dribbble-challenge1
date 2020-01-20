@@ -12,14 +12,14 @@ export default class MusicApp extends Component {
 
     constructor(props) {
         super(props);
-        this.onStateChange = Animated.event([
+        this.buttonOpacity = new Value(1)
+        this.onStateChange = event([
             {
-                nativeEvent: (state) => block([
-                    cond(eq(state, State.END))
+                nativeEvent: ( { state } ) => block([
+                    cond(eq(state, State.END), set(this.buttonOpacity, 0))
                 ])
             }
         ])
-        this.buttonOpacity = new Value(1)
     }
 
     render() {
@@ -32,14 +32,14 @@ export default class MusicApp extends Component {
                 </View>
                 <View style={{height: height/3}}>
                 <TapGestureHandler onHandlerStateChange={this.onStateChange}>
-                    <View style={styles.button}>
+                    <Animated.View style={{...styles.button, opacity: this.buttonOpacity}}>
                         <Text style={{ fontSize: 20, fontWeight: "bold"}}>SIGN IN</Text>
-                    </View>
+                    </Animated.View>
                     </TapGestureHandler>
                 <TapGestureHandler>
-                    <View style={{...styles.button, backgroundColor: "#2E71DC"}}>
+                    <Animated.View style={{...styles.button, backgroundColor: "#2E71DC"}}>
                         <Text style={{ fontSize: 20, fontWeight: "bold", color: "white"}}>SIGN IN WITH FACEBOOK</Text>
-                    </View>
+                    </Animated.View>
                 </TapGestureHandler>
                 </View>
             </View>
