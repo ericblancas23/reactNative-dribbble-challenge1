@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Image, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, Image, Dimensions, TextInput } from 'react-native';
 import "../assets/bg.jpg";
 import Animated, { Easing } from 'react-native-reanimated';
 import { TapGesture, State, TapGestureHandler } from 'react-native-gesture-handler';
@@ -63,6 +63,25 @@ export default class MusicApp extends Component {
             outputRange: [-height / 3,0],
             extrapolate: Extrapolate.CLAMP,
         }); 
+
+        this.textInputZindex = interpolate(this.buttonOpacity, {
+            inputRange: [0,1],
+            outputRange: [1,-1],
+            extrapolate: Extrapolate.CLAMP,
+        }); 
+        
+        this.textInputY = interpolate(this.buttonOpacity, {
+            inputRange: [0,1],
+            outputRange: [0, 100],
+            extrapolate: Extrapolate.CLAMP,
+        }); 
+
+        this.textInputOpacity = interpolate(this.buttonOpacity, {
+            inputRange: [0,1],
+            outputRange: [1, 0],
+            extrapolate: Extrapolate.CLAMP,
+        });  
+
     }
 
     render() {
@@ -81,12 +100,19 @@ export default class MusicApp extends Component {
                         <Text style={{ fontSize: 20, fontWeight: "bold"}}>SIGN IN</Text>
                     </Animated.View>
                     </TapGestureHandler>
-                <TapGestureHandler>
                     <Animated.View style={{...styles.button, backgroundColor: "#2E71DC", 
                                     opacity: this.buttonOpacity, transform: [{translateY: this.buttonY}]}}>
                         <Text style={{ fontSize: 20, fontWeight: "bold", color: "white"}}>SIGN IN WITH FACEBOOK</Text>
                     </Animated.View>
-                </TapGestureHandler>
+                    <Animated.View style={{ zIndex: this.textInputZindex, opacity: this.textInputOpacity, 
+                    transform:[{translateY: this.textInputY}], height: height / 3, 
+                    ...StyleSheet.absoluteFill,top: null, justifyContent: "center"}}>
+                        <TextInput placeholder="EMAIL" style={styles.textInput} placeholderTextColor="black"/>
+                        <TextInput placeholder="PASSWORD" style={styles.textInput} placeholderTextColor="black"/>
+                        <Animated.View style={styles.button}>
+                            <Text style={{ fontSize: 20, fontWeight: "bold" }}>SIGN IN</Text>
+                        </Animated.View>
+                    </Animated.View>
                 </View>
             </View>
         )
@@ -102,5 +128,14 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginVertical: 5,
+    },
+    textInput: {
+        height: 50,
+        borderRadius: 25,
+        borderWidth: 0.5,
+        marginHorizontal: 20,
+        paddingLeft: 10,
+        marginVertical: 5,
+        borderColor: 'rgba(0,0,0,0.2)'
     }
 })
